@@ -23,7 +23,7 @@ function drawCreature(){
       rect(450, 150, 55, 55);
       
     https://p5js.org/reference/#/p5/rect
-    fill('white')
+    fill('red')
     rect(450, 150, 40, 40);
 
     https://p5js.org/reference/#/p5/rect
