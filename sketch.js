@@ -58,7 +58,8 @@ function moveController(ev) {
   // right arrow moves circle right
   // up arrow moves circle up
   // down arrow moves circle down
-
+}
+  
   if (ev.code === 'ArrowUp') {
       y = y - 10;
       console.log('The user just pressed the up arrow!');
