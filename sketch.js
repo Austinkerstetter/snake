@@ -13,7 +13,6 @@ function setup() {
     fill(fillColor);
     circle(x, y, width);
 
-    drawGrid(canvasWidth, canvasHeight);
 }
 
 function moveController (ev) { 
