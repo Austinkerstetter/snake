@@ -62,13 +62,11 @@ function moveController (ev) {
    
 
     clear();
-    // noFill();
     fill(fillColor);
     circle(x, y, width);
     drawGrid(canvasWidth, canvasHeight);
     circle(makeCreature)[x, y, fillColor, eyeColor];
 }
-
 
 // Add event listener on keydown
 document.addEventListener('keydown', moveController);
