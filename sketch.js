@@ -9,10 +9,27 @@ const canvasHeight = window.innerHeight;
 function setup() {
     createCanvas(canvasWidth, canvasHeight);
 
-    // fill('red');
-    fill(fillColor);
-    circle(x, y, width);
+    drawGrid(canvasWidth, canvasHeight);
+}
+function setup() {
+    const canvasWidth = window.innerWidth;
 
+    const canvasHeight = window.innerHeight; 
+
+    createCanvas(canvasWidth, canvasHeight);
+
+    drawGrid(canvasWidth, canvasHeight)
+
+    makeCreature(200, 200, 'pink', 'red');
+    }
+
+
+function makeCreature(x, y, fillColor, eyeColor) {
+    fill(fillColor);
+    circle(x, y, 300);
+    fill(eyeColor);
+    ellipse(x-50, y-50, 30, 40);
+    ellipse(x+50, y-50, 30, 40);
 }
 
 function moveController (ev) { 
@@ -49,7 +66,7 @@ function moveController (ev) {
     fill(fillColor);
     circle(x, y, width);
     drawGrid(canvasWidth, canvasHeight);
-    makeCreature(x, y, fillColor, eyeColor)
+    circle(makeCreature)[x, y, fillColor, eyeColor];
 }
 
 
