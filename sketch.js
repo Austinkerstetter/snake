@@ -1,110 +1,84 @@
-// function setup() {
-//   const canvasWidth = window.innerWidth;
-//   const canvasHeight = window.innerHeight; 
-//   createCanvas(canvasWidth, canvasHeight);
-//   background("#DDD");
+const blockSize = 25;
+const rows = 20;
+const cols = 20;
+let board;
+let context; 
+let snakeX = blockSize * 5;
+let snakeY = blockSize * 5;
+let velocityX = 0;
+let velocityY = 0;
+let snakeBody = [];
+let foodX;
+let foodY;
+let gameOver = false;
 
-
-// drawCreature();
-
-// }
-
-// function drawCreature(){
-   
-//     fill("green")
-//     circle(400, 200, 300); //x, y, diameter 
-
-
-//     fill('hotpink')
-//     rect(300, 150, 55, 55);
-
-    
-//     fill('hotpink')
-//     rect(450, 150, 55, 55);
-    
-//   https://p5js.org/reference/#/p5/rect
-//   fill('red')
-//   rect(450, 150, 40, 40);
-
-//   https://p5js.org/reference/#/p5/rect
-//   fill('white')
-//   rect(315, 150, 40, 40);
- 
-//   https://p5js.org/reference/#/p5/ellipse
-//   fill('pink');
-//   ellipse(400, 260, 200, 100);
-//   https://p5js.org/reference/#/p5/ellipse
-//   fill('black');
-//   ellipse(400, 260, 180, 90);
-
-// }
-
-let x = 100;
-let y = 200;
-let width = 50;
-let fillColor = 'pink';
-
-const canvasWidth = window.innerWidth;
-const canvasHeight = window.innerHeight; 
-
-function setup() {
-    createCanvas(canvasWidth, canvasHeight);
-
-    // fill('red');
-    fill(fillColor);
-    circle(x, y, width);
-
-    drawGrid(canvasWidth, canvasHeight);
+window.onload = function() {
+    board = document.getElementById("board");
+    board.height = rows * blockSize;
+    board.width = cols * blockSize;
+    context = board.getContext("2d");
+    placeFood();
+    document.addEventListener("keyup", changeDirection);
+    setInterval(update, 1000/10);
 }
 
-function makeCreature(x, y, fillColor, eyeColor) {
-    fill(fillColor);
-    circle(x, y, 300);
-    fill(eyeColor);
-    ellipse(x-50, y-50, 30, 40);
-    ellipse(x+50, y-50, 30, 40);
-}
-
-function moveController (ev) { 
-    console.log(ev.code);
-    // left arrow moves circle left
-    // right arrow moves circle right
-    // up arrow moves circle up
-    // down arrow moves circle down
-
-    // redraw circle:
-    if (ev.code==='ArrowUp') {
-        y=y-10;
-        console.log('the user just pressed the up arrow!')
-    } else if (ev.code==='ArrowDown') {
-        y=y+10;
-        console.log('the user just pressed the down arrow!')
-    } else if (ev.code==='ArrowLeft') {
-        x=x-10
-        console.log('the user just pressed the left arrow!')
-    }else if (ev.code==='ArrowRight') {
-        x=x+10
-        console.log('the user just pressed the left arrow!')
-    }else if (ev.code==='Space') {
-        width=width+10;
-    }else if (ev.code==="Minus") {
-        width=width-10;
-    }else if (ev.code==='KeyR') {
-        fillColor = 'purple';
+function update() {
+    if (gameOver) return;
+    context.fillStyle = "lightgreen";
+    context.fillRect(0, 0, board.width, board.height);
+    context.fillStyle = "red";
+    context.fillRect(foodX, foodY, blockSize, blockSize);
+    if (snakeX == foodX && snakeY == foodY) {
+        snakeBody.push([foodX, foodY]);
+        placeFood();
     }
-   
-
-    clear();
-    // noFill();
-    fill(fillColor);
-    circle(x, y, width);
-    drawGrid(canvasWidth, canvasHeight);
-    makeCreature(x, y, fillColor, eyeColor)
+    for (let i = snakeBody.length-1; i > 0; i--) {
+        snakeBody[i] = snakeBody[i-1];
+    }
+    if (snakeBody.length) snakeBody[0] = [snakeX, snakeY];
+    context.fillStyle = "lime";
+    snakeX += velocityX * blockSize;
+    snakeY += velocityY * blockSize;
+    context.beginPath();
+    context.arc(snakeX + blockSize/2, snakeY + blockSize/2, blockSize/2, 0, 2*Math.PI);
+    context.fillStyle = "darkgreen";
+    context.fill();
+    for (let i = 0; i < snakeBody.length; i++) {
+        context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
+    }
+    if (snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
+        gameOver = true;
+        alert("Game Over");
+    }
+    for (let i = 0; i < snakeBody.length; i++) {
+        if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
+            gameOver = true;
+            alert("Game Over");
+        }
+    }
 }
 
+function changeDirection(e) {
+    if (e.code == "ArrowUp" && velocityY != 1) {
+        velocityX = 0;
+        velocityY = -1;
+    } else if (e.code == "ArrowDown" && velocityY != -1) {
+        velocityX = 0;
+        velocityY = 1;
+    } else if (e.code == "ArrowLeft" && velocityX != 1) {
+        velocityX = -1;
+        velocityY = 0;
+    } else if (e.code == "ArrowRight" && velocityX != -1) {
+        velocityX = 1;
+        velocityY = 0;
+    }
+}
 
-// Add event listener on keydown
-document.addEventListener('keydown', moveController);
+function placeFood() {
+    foodX = Math.floor(Math.random() * cols) * blockSize;
+    foodY = Math.floor(Math.random() * rows) * blockSize;
+}
+
 
 
 
