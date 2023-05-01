@@ -24,7 +24,7 @@ window.onload = function() {
 
 function update() {
     if (gameOver) return;
-    context.fillStyle = "lightgreen";
+    context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
     context.fillStyle = "red";
     context.fillRect(foodX, foodY, blockSize, blockSize);
@@ -36,27 +36,32 @@ function update() {
         snakeBody[i] = snakeBody[i-1];
     }
     if (snakeBody.length) snakeBody[0] = [snakeX, snakeY];
-    context.fillStyle = "lime";
+    context.fillStyle = "darkgreen";
+    for (let i = 0; i < snakeBody.length; i++) {
+        context.beginPath();
+        context.arc(snakeBody[i][0] + blockSize/2, snakeBody[i][1] + blockSize/2, blockSize/2, 0, 2*Math.PI);
+        context.fill();
+    }
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
     context.beginPath();
     context.arc(snakeX + blockSize/2, snakeY + blockSize/2, blockSize/2, 0, 2*Math.PI);
-    context.fillStyle = "darkgreen";
+    context.fillStyle = "lime";
     context.fill();
-    for (let i = 0; i < snakeBody.length; i++) {
-        context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
-    }
     if (snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
         gameOver = true;
         alert("Game Over");
+        window.location.reload();
     }
     for (let i = 0; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             gameOver = true;
             alert("Game Over");
+            window.location.reload();
         }
     }
 }
+
 
 function changeDirection(e) {
     if (e.code == "ArrowUp" && velocityY != 1) {
